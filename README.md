@@ -1,10 +1,26 @@
-SharePoint Regional Settings Manager
-Planned Windows Forms application for PowerShell 7 and PnP.PowerShell. It will manage SharePoint Online regional settings at tenant scale, targeting English (New Zealand), LocaleId 5129.
-Project scope
-1. Verify PnP.PowerShell at startup. Offer installation if missing and exit cleanly if it remains unavailable.
-2. Sign in interactively with Connect-PnPOnline and discover tenant sites.
-3. Export current regional settings before changes.
-4. Apply LocaleId 5129 to sites with a different locale.
-5. Restore previous LocaleId values from an export.
-6. Show live progress and each site's before and after state.
-The application is intended for tenants with hundreds or thousands of sites. This repository currently contains the project brief.
+# SharePoint Regional Settings Manager
+
+A Windows PowerShell tool for discovering, exporting, updating and restoring SharePoint Online site collection locales. It applies English (New Zealand), locale ID `5129`, to the root webs of discovered site collections.
+
+## Requirements
+
+- Windows with PowerShell 7.4 or later.
+- PnP.PowerShell 2.12.0 or later, compatible with your version of PowerShell. The tool offers to install it if a compatible version is missing.
+- The SharePoint tenant admin URL and an Entra public client application ID. Configure the app for interactive sign-in with the `http://localhost` redirect URI under **Mobile and desktop applications**, and consent to the appropriate SharePoint delegated permissions (normally `AllSites.FullControl`). The signed-in account needs SharePoint admin permissions for discovery and permission to manage regional settings on the sites it updates.
+
+## Run
+
+Open PowerShell in the repository folder and run:
+
+```powershell
+pwsh -NoProfile -STA -File .\SharePointRegionalSettingsManager.ps1
+```
+
+Enter the tenant admin URL and client ID in the app, or prefill them with `-TenantAdminUrl` and `-ClientId`. For a Multi-Geo tenant, pass the additional admin URLs with `-AdditionalAdminUrls`.
+
+1. Select **Connect**, then **Discover Sites**.
+2. Select **Export Settings** to save the current locales before applying changes.
+3. Select **Apply NZ Locale** to update discovered sites. The tool checks each site's current locale, skips sites already set to `5129` and verifies changes in SharePoint.
+4. To restore previous locales, select **Rollback** and load an export or recovery CSV. The app shows the recovery CSV path in the live log. Each original locale is written to that file before the corresponding site is updated.
+
+Use **Grid State CSV** to export the full inventory and its current status.
