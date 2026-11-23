@@ -10,11 +10,19 @@ A Windows PowerShell tool for discovering, exporting, updating and restoring Sha
 
 ## Run
 
-Open PowerShell in the repository folder and run:
+Open PowerShell in the repository folder and run the following command. It sets `RemoteSigned` for the app's PowerShell session only. Organisation Group Policy takes precedence.
 
 ```powershell
-pwsh -NoProfile -STA -File .\SharePointRegionalSettingsManager.ps1
+pwsh -NoProfile -STA -ExecutionPolicy RemoteSigned -File .\SharePointRegionalSettingsManager.ps1
 ```
+
+If you downloaded the script and Windows marked it as coming from the internet, review the file and run the following command before launching it.
+
+```powershell
+Unblock-File -LiteralPath .\SharePointRegionalSettingsManager.ps1
+```
+
+[PowerShell execution policy reference](https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_execution_policies)
 
 Enter the tenant admin URL and client ID in the app, or prefill them with `-TenantAdminUrl` and `-ClientId`. For a Multi-Geo tenant, pass the additional admin URLs with `-AdditionalAdminUrls`.
 
